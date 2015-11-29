@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace LadybirdConverter
 {
@@ -19,43 +20,123 @@ namespace LadybirdConverter
 
         private void btnRun_Click(object sender, EventArgs e)
         {
-            string input = tbInput.Text;
-            string output = "";
+            tbOutput.Text = ReverseLine(tbInput.Text);
+        }
 
-            input = new string(input.Reverse().ToArray());
+        private void btnConvertFolder_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog dialog = new FolderBrowserDialog();
 
-            foreach (char c in input)
+            dialog.ShowDialog();
+
+            if (dialog.SelectedPath != "")
+            {
+                DirectoryInfo dir = new DirectoryInfo(dialog.SelectedPath);
+                string outPath = dir.Parent.FullName + "/" + Path.GetFileName(dir.FullName) + "_reversed";
+
+                if (!Directory.Exists(outPath))
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(outPath);
+                    }
+                    catch (Exception up)
+                    {
+                        throw up;
+                    }
+                }
+
+                foreach (var file in dir.GetFiles())
+                {
+                    string[] lines = File.ReadAllLines(file.FullName);
+                    string[] outLines = ReverseAllLines(lines);
+
+                    string fileName = file.Name;
+
+                    using (var dummy = File.Create(outPath + "/" + fileName))
+                    {
+                    }
+                    File.WriteAllLines(outPath + "/" + fileName, outLines);
+                }
+
+                MessageBox.Show("Done!");
+            }
+        }
+
+        private string[] ReverseAllLines(string[] lines)
+        {
+            List<string> returnLines = new List<string>();
+            string convertLine = "";
+
+            for(int i = 0; i<lines.Length; i++)
+            {
+                string line = lines[i];
+
+                if (line.Length == 0)
+                {
+                    if (convertLine.Length > 0)
+                    {
+                        convertLine = convertLine.Substring(0, convertLine.Length - 2);
+                        returnLines.Add(ReverseLine(convertLine));
+                        convertLine = "";
+                    }
+                    returnLines.Add(lines[i]);
+                }
+                else if (line[0] == '>')
+                {
+                    if (convertLine.Length > 0)
+                    {
+                        convertLine = convertLine.Substring(0, convertLine.Length - 2);
+                        returnLines.Add(ReverseLine(convertLine));
+                        convertLine = "";
+                    }
+                    returnLines.Add(lines[i]);
+                }
+                else
+                {
+                    convertLine += line + "\r\n";
+                }                    
+            }
+            return returnLines.ToArray();
+        }
+
+        private string ReverseLine(string line)
+        {
+            string returnLine = "";
+
+            foreach (char c in line.Reverse())
             {
                 switch (c)
                 {
                     case 'a':
                     case 'A':
-                        output += "T";
+                        returnLine += "T";
                         break;
                     case 'c':
                     case 'C':
-                        output += "G";
+                        returnLine += "G";
                         break;
                     case 'g':
                     case 'G':
-                        output += "C";
+                        returnLine += "C";
                         break;
                     case 't':
                     case 'T':
-                        output += "A";
+                        returnLine += "A";
                         break;
                     case '\r':
-                        output += '\n';
+                        returnLine += '\n';
                         break;
                     case '\n':
-                        output += '\r';
+                        returnLine += '\r';
                         break;
                     default:
-                        output += "N";
+                        returnLine += "N";
                         break;
                 }
             }
-            tbOutput.Text = output;
+            return returnLine;
         }
+
     }
 }

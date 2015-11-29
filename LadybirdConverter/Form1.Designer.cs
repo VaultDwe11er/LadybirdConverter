@@ -33,6 +33,7 @@
             this.btnRun = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.btnConvertFolder = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tbInput
@@ -56,11 +57,11 @@
             // 
             // btnRun
             // 
-            this.btnRun.Location = new System.Drawing.Point(227, 341);
+            this.btnRun.Location = new System.Drawing.Point(167, 340);
             this.btnRun.Name = "btnRun";
             this.btnRun.Size = new System.Drawing.Size(129, 47);
             this.btnRun.TabIndex = 2;
-            this.btnRun.Text = "Run!";
+            this.btnRun.Text = "Run";
             this.btnRun.UseVisualStyleBackColor = true;
             this.btnRun.MouseClick += new System.Windows.Forms.MouseEventHandler(this.btnRun_Click);
             // 
@@ -82,9 +83,20 @@
             this.label2.TabIndex = 4;
             this.label2.Text = "Output:";
             // 
+            // btnConvertFolder
+            // 
+            this.btnConvertFolder.Location = new System.Drawing.Point(302, 340);
+            this.btnConvertFolder.Name = "btnConvertFolder";
+            this.btnConvertFolder.Size = new System.Drawing.Size(129, 47);
+            this.btnConvertFolder.TabIndex = 5;
+            this.btnConvertFolder.Text = "Convert folder...";
+            this.btnConvertFolder.UseVisualStyleBackColor = true;
+            this.btnConvertFolder.Click += new System.EventHandler(this.btnConvertFolder_Click);
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(597, 399);
+            this.Controls.Add(this.btnConvertFolder);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnRun);
@@ -104,6 +116,7 @@
         private System.Windows.Forms.Button btnRun;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btnConvertFolder;
     }
 }
 
