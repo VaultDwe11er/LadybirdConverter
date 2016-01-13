@@ -97,6 +97,12 @@ namespace LadybirdConverter
                     convertLine += line + "\r\n";
                 }                    
             }
+            if(convertLine.Length > 0)
+            {
+                convertLine = convertLine.Substring(0, convertLine.Length - 2);
+                returnLines.Add(ReverseLine(convertLine));
+                convertLine = "";
+            }
             return returnLines.ToArray();
         }
 
